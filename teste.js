@@ -49,26 +49,26 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
     const maiorNivel = Math.max(...Object.values(niveis));
 
         //Docente
-        const docente = {
-            numeroIdentificador:numeroIdentificador,
+        const instructors = {
+            lattes_resume_number:numeroIdentificador,
             name: nomeCompleto,
-            resumo:resumoCV,
-            titulacao:titulacoes [maiorNivel],
+            summary:resumoCV,
+            qualification:titulacoes [maiorNivel],
             //Área de atuação(FK)  
         }
-        console.log('Docente' ,docente)
+        console.log('Docente' ,instructors)
  
     
     //IDENTIDADE ÁREA DE ATUAÇÃO
     const nomeDaAreaDeAtucao = dadosGerais['AREAS-DE-ATUACAO'][0]['AREA-DE-ATUACAO'][0]['$']['NOME-DA-AREA-DO-CONHECIMENTO'];
     const nomeDaEspecialidade = dadosGerais['AREAS-DE-ATUACAO'][0]['AREA-DE-ATUACAO'][0]['$']['NOME-DA-ESPECIALIDADE'];
 
-    const areaDeAtuacao={
-        nomeDaAreaDeAtucao:nomeDaAreaDeAtucao ,
-        nomeDaEspecialidade:nomeDaEspecialidade , 
+    const area_of_activity={
+        name:nomeDaAreaDeAtucao ,
+        specialization_name:nomeDaEspecialidade , 
     }
 
-    console.log('Área de atuação',areaDeAtuacao)
+    console.log('Área de atuação',area_of_activity)
 
 
     
@@ -80,8 +80,8 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
          projetosData = atuacao['ATIVIDADES-DE-PARTICIPACAO-EM-PROJETO'] ? atuacao['ATIVIDADES-DE-PARTICIPACAO-EM-PROJETO'][0]['PARTICIPACAO-EM-PROJETO'].map(projeto => {
             const membros = projeto['PROJETO-DE-PESQUISA'][0]['EQUIPE-DO-PROJETO'] ? projeto['PROJETO-DE-PESQUISA'][0]['EQUIPE-DO-PROJETO'][0]['INTEGRANTES-DO-PROJETO']
                 .map(membro=>({
-                    nome: membro['$']['NOME-COMPLETO'],
-                    ordem: membro['$']['ORDEM-DE-INTEGRACAO'],
+                    name: membro['$']['NOME-COMPLETO'],
+                    authorship_order: membro['$']['ORDEM-DE-INTEGRACAO'],
                     flagResponsavel: membro['$']['FLAG-RESPONSAVEL'],
                 
                 })):[]
@@ -90,37 +90,37 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
             const financiadorData = projeto['PROJETO-DE-PESQUISA'][0]['FINANCIADORES-DO-PROJETO'] ? projeto['PROJETO-DE-PESQUISA'][0]['FINANCIADORES-DO-PROJETO'][0]['FINANCIADOR-DO-PROJETO']
                 .map(financiador => ({
                     sequenciaFinanciador: financiador['$']['SEQUENCIA-FINANCIADOR'],
-                    codigoInstituicao: financiador['$']['CODIGO-INSTITUICAO'],
-                    nomeInstituicao: financiador['$']['NOME-INSTITUICAO'],
-                    natureza: financiador['$']['NATUREZA']
+                    code: financiador['$']['CODIGO-INSTITUICAO'],
+                    name: financiador['$']['NOME-INSTITUICAO'],
+                    nature: financiador['$']['NATUREZA']
                 })):[]
                 financiadoresData.push(financiadorData)
 
             return{
-            inicio: projeto['$']['ANO-INICIO'],
-            fim: projeto['$']['ANO-FIM'],
-            nome: projeto['PROJETO-DE-PESQUISA'][0]['$']['NOME-DO-PROJETO'],
-            natureza: projeto['PROJETO-DE-PESQUISA'][0]['$']['NATUREZA'],
-            situacao: projeto['PROJETO-DE-PESQUISA'][0]['$']['SITUACAO'],
-            descricao: projeto['PROJETO-DE-PESQUISA'][0]['$']['DESCRICAO-DO-PROJETO'],
-            membros:membros,
-            financiador: financiadorData
+            start_date: projeto['$']['ANO-INICIO'],
+            end_date: projeto['$']['ANO-FIM'],
+            name: projeto['PROJETO-DE-PESQUISA'][0]['$']['NOME-DO-PROJETO'],
+            nature: projeto['PROJETO-DE-PESQUISA'][0]['$']['NATUREZA'],
+            situation: projeto['PROJETO-DE-PESQUISA'][0]['$']['SITUACAO'],
+            description: projeto['PROJETO-DE-PESQUISA'][0]['$']['DESCRICAO-DO-PROJETO'],
+            members:membros,
+            financiers: financiadorData
             }
         }  
         ) : [];
         return {
             codigoInstituicao: atuacao['$']['CODIGO-INSTITUICAO'],
-            nome: atuacao['$']['NOME-INSTITUICAO'],
-            projetos: projetosData
+            name: atuacao['$']['NOME-INSTITUICAO'],
+            projects: projetosData
         };
     });
 
-    const atuacaoProfissional= {
+    const professional_activities= {
         ...atuacoesData
 
     }
     console.log('Atuação Profissional')
-    console.dir(atuacaoProfissional, { depth: null });
+    console.dir(professional_activities, { depth: null });
 
 
     //IDENTIDADE PRODUÇÃO
@@ -129,44 +129,47 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
 
     const trabalhoEmEventosData = producaoBibliografica['TRABALHOS-EM-EVENTOS'][0]['TRABALHO-EM-EVENTOS'].map(trabalho=>{      
         const membros= trabalho['AUTORES'].map(membro=>({
-            nome : membro['$']['NOME-COMPLETO-DO-AUTOR'],
-            ordem: membro['$']['ORDEM-DE-AUTORIA'],
+            name : membro['$']['NOME-COMPLETO-DO-AUTOR'],
+            authorship_order: membro['$']['ORDEM-DE-AUTORIA'],
         }))
         
         return{
         sequencia:trabalho['$']['SEQUENCIA-PRODUCAO'],
-        natureza:trabalho['DADOS-BASICOS-DO-TRABALHO'][0]['$']['NATUREZA'],
-        titulo:trabalho['DADOS-BASICOS-DO-TRABALHO'][0]['$']['TITULO-DO-TRABALHO'],
-        ano:trabalho['DADOS-BASICOS-DO-TRABALHO'][0]['$']['ANO-DO-TRABALHO'],
-        membros: membros
+        production_type: "Bibliográfica",
+        nature:trabalho['DADOS-BASICOS-DO-TRABALHO'][0]['$']['NATUREZA'],
+        title:trabalho['DADOS-BASICOS-DO-TRABALHO'][0]['$']['TITULO-DO-TRABALHO'],
+        year:trabalho['DADOS-BASICOS-DO-TRABALHO'][0]['$']['ANO-DO-TRABALHO'],
+        members: membros
         }
     })
     console.log("Trabalhos em eventos",trabalhoEmEventosData)
 
     const artigoPublicadoData = producaoBibliografica['ARTIGOS-PUBLICADOS'][0]['ARTIGO-PUBLICADO'].map(artigo=>{      
         const membros= artigo['AUTORES'].map(membro=>({
-            nome : membro['$']['NOME-COMPLETO-DO-AUTOR'],
-            ordem: membro['$']['ORDEM-DE-AUTORIA'],
+            name : membro['$']['NOME-COMPLETO-DO-AUTOR'],
+            authorship_order: membro['$']['ORDEM-DE-AUTORIA'],
         }))
         
         return{
         sequencia:artigo['$']['SEQUENCIA-PRODUCAO'],
-        natureza:artigo['DADOS-BASICOS-DO-ARTIGO'][0]['$']['NATUREZA'],
-        titulo:artigo['DADOS-BASICOS-DO-ARTIGO'][0]['$']['TITULO-DO-ARTIGO'],
-        ano:artigo['DADOS-BASICOS-DO-ARTIGO'][0]['$']['ANO-DO-ARTIGO'],
-        membros: membros
+        production_type: "Bibliográfica",
+        nature:artigo['DADOS-BASICOS-DO-ARTIGO'][0]['$']['NATUREZA'],
+        title:artigo['DADOS-BASICOS-DO-ARTIGO'][0]['$']['TITULO-DO-ARTIGO'],
+        year:artigo['DADOS-BASICOS-DO-ARTIGO'][0]['$']['ANO-DO-ARTIGO'],
+        members: membros
         }
     })
     console.log("Artigos Publicados",artigoPublicadoData)
 
     const outrasProducoesDataData = producaoBibliografica['DEMAIS-TIPOS-DE-PRODUCAO-BIBLIOGRAFICA'][0]['OUTRA-PRODUCAO-BIBLIOGRAFICA'].map(producao=>{      
         const membros= producao['AUTORES'].map(membro=>({
-            nome : membro['$']['NOME-COMPLETO-DO-AUTOR'],
-            ordem: membro['$']['ORDEM-DE-AUTORIA'],
+            name : membro['$']['NOME-COMPLETO-DO-AUTOR'],
+            authorship_order: membro['$']['ORDEM-DE-AUTORIA'],
         }))
         
         return{
         sequencia:producao['$']['SEQUENCIA-PRODUCAO'],
+        production_type: "Bibliográfica",
         natureza:producao['DADOS-BASICOS-DE-OUTRA-PRODUCAO'][0]['$']['NATUREZA'],
         titulo:producao['DADOS-BASICOS-DE-OUTRA-PRODUCAO'][0]['$']['TITULO'],
         ano:producao['DADOS-BASICOS-DE-OUTRA-PRODUCAO'][0]['$']['ANO'],
@@ -188,16 +191,17 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
     const softwareData = producaoTecnica['SOFTWARE'].map(software=>{
 
         const membros= software['AUTORES'].map(membro=>({
-            nome : membro['$']['NOME-COMPLETO-DO-AUTOR']
+            name : membro['$']['NOME-COMPLETO-DO-AUTOR']
         }))
 
         return{
         sequencia:software['$']['SEQUENCIA-PRODUCAO'],
-        natureza:software['DADOS-BASICOS-DO-SOFTWARE'][0]['$']['NATUREZA'],
-        titulo:software['DADOS-BASICOS-DO-SOFTWARE'][0]['$']['TITULO-DO-SOFTWARE'],
-        ano:software['DADOS-BASICOS-DO-SOFTWARE'][0]['$']['ANO'],
-        finalidade: software['DETALHAMENTO-DO-SOFTWARE'][0]['$']['FINALIDADE'],
-        nomeDoFinanciador: software['DETALHAMENTO-DO-SOFTWARE'][0]['$']['INSTITUICAO-FINANCIADORA'],
+        production_type: "Técnica",
+        nature:software['DADOS-BASICOS-DO-SOFTWARE'][0]['$']['NATUREZA'],
+        title:software['DADOS-BASICOS-DO-SOFTWARE'][0]['$']['TITULO-DO-SOFTWARE'],
+        year:software['DADOS-BASICOS-DO-SOFTWARE'][0]['$']['ANO'],
+        purpose: software['DETALHAMENTO-DO-SOFTWARE'][0]['$']['FINALIDADE'],
+        financial_institution: software['DETALHAMENTO-DO-SOFTWARE'][0]['$']['INSTITUICAO-FINANCIADORA'],
         membros: membros
 
         }
@@ -208,16 +212,17 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
     const trabalhoTecnicoData = producaoTecnica['TRABALHO-TECNICO'].map(trabalho=>{
 
         const membros= trabalho['AUTORES'].map(membro=>({
-            nome : membro['$']['NOME-COMPLETO-DO-AUTOR']
+            name : membro['$']['NOME-COMPLETO-DO-AUTOR']
         }))
 
         return{
         sequencia:trabalho['$']['SEQUENCIA-PRODUCAO'],
-        natureza:trabalho['DADOS-BASICOS-DO-TRABALHO-TECNICO'][0]['$']['NATUREZA'],
-        titulo:trabalho['DADOS-BASICOS-DO-TRABALHO-TECNICO'][0]['$']['TITULO-DO-TRABALHO-TECNICO'],
-        ano:trabalho['DADOS-BASICOS-DO-TRABALHO-TECNICO'][0]['$']['ANO'],
-        finalidade: trabalho['DETALHAMENTO-DO-TRABALHO-TECNICO'][0]['$']['FINALIDADE'],
-        nomeDoFinanciador: trabalho['DETALHAMENTO-DO-TRABALHO-TECNICO'][0]['$']['INSTITUICAO-FINANCIADORA'],
+        production_type: "Técnica",
+        nature:trabalho['DADOS-BASICOS-DO-TRABALHO-TECNICO'][0]['$']['NATUREZA'],
+        title:trabalho['DADOS-BASICOS-DO-TRABALHO-TECNICO'][0]['$']['TITULO-DO-TRABALHO-TECNICO'],
+        year:trabalho['DADOS-BASICOS-DO-TRABALHO-TECNICO'][0]['$']['ANO'],
+        purpose: trabalho['DETALHAMENTO-DO-TRABALHO-TECNICO'][0]['$']['FINALIDADE'],
+        financial_institution: trabalho['DETALHAMENTO-DO-TRABALHO-TECNICO'][0]['$']['INSTITUICAO-FINANCIADORA'],
         membros: membros
 
         }
@@ -230,18 +235,18 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
 
     const orientacoesMestrado =  orietacoesConcluidas['ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'].map(orientacao=>({
         sequencia:orientacao['$']['SEQUENCIA-PRODUCAO'],
-        concluido:true,
-        natureza:orientacao['DADOS-BASICOS-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['NATUREZA'],
+        completed:true,
+        nature:orientacao['DADOS-BASICOS-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['NATUREZA'],
         tipo:orientacao['DADOS-BASICOS-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['TIPO'],
-        titulo:orientacao['DADOS-BASICOS-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['TITULO'],
-        ano:orientacao['DADOS-BASICOS-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['ANO'],
-        tipoDeOrientacao:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['TIPO-DE-ORIENTACAO'],
-        nomeDoOrientado:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['NOME-DO-ORIENTADO'],
-        idOrientado:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['NUMERO-ID-ORIENTADO'],
-        codigoInstituicao:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['CODIGO-INSTITUICAO'],
-        nomeInstituicao:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['NOME-DA-INSTITUICAO'],
-        codigoCurso:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['CODIGO-CURSO'],
-        nomeCurso:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['NOME-DO-CURSO'],
+        title:orientacao['DADOS-BASICOS-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['TITULO'],
+        year:orientacao['DADOS-BASICOS-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['ANO'],
+        orientation_type:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['TIPO-DE-ORIENTACAO'],
+        instructor_name:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['NOME-DO-ORIENTADO'],
+        student_id:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['NUMERO-ID-ORIENTADO'],
+        institution_code:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['CODIGO-INSTITUICAO'],
+        institution_name:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['NOME-DA-INSTITUICAO'],
+        course_id:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['CODIGO-CURSO'],
+        course_name:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['NOME-DO-CURSO'],
         codigoAgenciaFinanciadora:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['CODIGO-AGENCIA-FINANCIADORA'],
         nomeDaAgencia:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['NOME-DA-AGENCIA'],
 
@@ -250,18 +255,18 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
 
     const outrasOrientacoes =  orietacoesConcluidas['OUTRAS-ORIENTACOES-CONCLUIDAS'].map(orientacao=>({
         sequencia:orientacao['$']['SEQUENCIA-PRODUCAO'],
-        concluido:true,
-        natureza:orientacao['DADOS-BASICOS-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['NATUREZA'],
+        completed:true,
+        nature:orientacao['DADOS-BASICOS-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['NATUREZA'],
         tipo:orientacao['DADOS-BASICOS-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['TIPO'],
-        titulo:orientacao['DADOS-BASICOS-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['TITULO'],
-        ano:orientacao['DADOS-BASICOS-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['ANO'],
-        tipoDeOrientacao:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['TIPO-DE-ORIENTACAO-CONCLUIDA'],
-        nomeDoOrientado:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['NOME-DO-ORIENTADO'],
-        idOrientado:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['NUMERO-ID-ORIENTADO'],
-        codigoInstituicao:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['CODIGO-INSTITUICAO'],
-        nomeInstituicao:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['NOME-DA-INSTITUICAO'],
-        codigoCurso:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['CODIGO-CURSO'],
-        nomeCurso:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['NOME-DO-CURSO'],
+        title:orientacao['DADOS-BASICOS-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['TITULO'],
+        year:orientacao['DADOS-BASICOS-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['ANO'],
+        orientation_type:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['TIPO-DE-ORIENTACAO-CONCLUIDA'],
+        instructor_name:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['NOME-DO-ORIENTADO'],
+        student_id:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['NUMERO-ID-ORIENTADO'],
+        institution_code:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['CODIGO-INSTITUICAO'],
+        institution_name:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['NOME-DA-INSTITUICAO'],
+        course_id:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['CODIGO-CURSO'],
+        course_name:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['NOME-DO-CURSO'],
         codigoAgenciaFinanciadora:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['CODIGO-AGENCIA-FINANCIADORA'],
         nomeDaAgencia:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['NOME-DA-AGENCIA'],
 
@@ -274,17 +279,17 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
     const bancaMestrado =  dadosComplementares['PARTICIPACAO-EM-BANCA-TRABALHOS-CONCLUSAO'][0]['PARTICIPACAO-EM-BANCA-DE-MESTRADO'].map(banca=>{
 
         const membros = banca['PARTICIPANTE-BANCA'].map(membro=>({
-            nome:membro['$']['NOME-COMPLETO-DO-PARTICIPANTE-DA-BANCA'],
-            ordem:membro['$']['ORDEM-PARTICIPANTE'],
+            name:membro['$']['NOME-COMPLETO-DO-PARTICIPANTE-DA-BANCA'],
+            authorship_order:membro['$']['ORDEM-PARTICIPANTE'],
         }))
              
         return{
         sequencia:banca['$']['SEQUENCIA-PRODUCAO'],
-        natureza:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['NATUREZA'],
+        nature:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['NATUREZA'],
         tipo:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['TIPO'],
-        titulo:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['TITULO'],
-        ano:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['ANO'],
-        nomeDoCandidato:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['NOME-DO-CANDIDATO'],
+        title:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['TITULO'],
+        year:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['ANO'],
+        students_name:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['NOME-DO-CANDIDATO'],
         codigoInstituicao:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['CODIGO-INSTITUICAO'],
         nomeInstituicao:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['NOME-INSTITUICAO'],
         codigoCurso:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['CODIGO-CURSO'],
@@ -298,16 +303,16 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
     const bancaExame =  dadosComplementares['PARTICIPACAO-EM-BANCA-TRABALHOS-CONCLUSAO'][0]['PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'].map(banca=>{
 
         const membros = banca['PARTICIPANTE-BANCA'].map(membro=>({
-            nome:membro['$']['NOME-COMPLETO-DO-PARTICIPANTE-DA-BANCA'],
-            ordem:membro['$']['ORDEM-PARTICIPANTE'],
+            name:membro['$']['NOME-COMPLETO-DO-PARTICIPANTE-DA-BANCA'],
+            authorship_order:membro['$']['ORDEM-PARTICIPANTE'],
         }))
              
         return{
         sequencia:banca['$']['SEQUENCIA-PRODUCAO'],
-        natureza:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['NATUREZA'],
-        titulo:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['TITULO'],
-        ano:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['ANO'],
-        nomeDoCandidato:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['NOME-DO-CANDIDATO'],
+        nature:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['NATUREZA'],
+        title:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['TITULO'],
+        year:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['ANO'],
+        students_name:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['NOME-DO-CANDIDATO'],
         codigoInstituicao:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['CODIGO-INSTITUICAO'],
         nomeInstituicao:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['NOME-INSTITUICAO'],
         codigoCurso:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['CODIGO-CURSO'],
@@ -323,16 +328,16 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         
 
         const membros = banca['PARTICIPANTE-BANCA'].map(membro=>({
-            nome:membro['$']['NOME-COMPLETO-DO-PARTICIPANTE-DA-BANCA'],
-            ordem:membro['$']['ORDEM-PARTICIPANTE'],
+            name:membro['$']['NOME-COMPLETO-DO-PARTICIPANTE-DA-BANCA'],
+            authorship_order:membro['$']['ORDEM-PARTICIPANTE'],
         }))
              
         return{
         sequencia:banca['$']['SEQUENCIA-PRODUCAO'],
-        natureza:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['NATUREZA'],
-        titulo:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['TITULO'],
-        ano:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['ANO'],
-        nomeDoCandidato:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['NOME-DO-CANDIDATO'],
+        nature:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['NATUREZA'],
+        titlte:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['TITULO'],
+        year:banca['DADOS-BASICOS-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['ANO'],
+        students_name:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['NOME-DO-CANDIDATO'],
         codigoInstituicao:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['CODIGO-INSTITUICAO'],
         nomeInstituicao:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['NOME-INSTITUICAO'],
         codigoCurso:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['CODIGO-CURSO'],
@@ -350,11 +355,11 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
 
     const orientacaoEmAndamentoMestrado = orietacoesEmAndamento['ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'].map(orientacao=>({
         sequencia:orientacao['$']['SEQUENCIA-PRODUCAO'],
-        concluido:false,
-        natureza:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['NATUREZA'],
+        completed:false,
+        nature:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['NATUREZA'],
         tipo:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['TIPO'],
-        titulo:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['TITULO-DO-TRABALHO'],
-        ano:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['ANO'],
+        title:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['TITULO-DO-TRABALHO'],
+        year:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['ANO'],
         tipoDeOrientacao:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['TIPO-DE-ORIENTACAO'],
         nomeDoOrientando:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['NOME-DO-ORIENTANDO'],
         idOrientado:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['NUMERO-ID-ORIENTADO'],
@@ -371,11 +376,11 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
 
     const orientacaoEmAndamentoDoutorado = orietacoesEmAndamento['ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'].map(orientacao=>({
         sequencia:orientacao['$']['SEQUENCIA-PRODUCAO'],
-        concluido:false,
-        natureza:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['NATUREZA'],
+        completed:false,
+        nature:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['NATUREZA'],
         // tipo:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['TIPO'],
-        titulo:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['TITULO-DO-TRABALHO'],
-        ano:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['ANO'],
+        title:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['TITULO-DO-TRABALHO'],
+        year:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['ANO'],
         tipoDeOrientacao:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['TIPO-DE-ORIENTACAO'],
         nomeDoOrientando:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['NOME-DO-ORIENTANDO'],
         idOrientando:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['NUMERO-ID-ORIENTANDO'],
@@ -393,10 +398,10 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
 
     const orientacaoEmAndamentoInciacao = orietacoesEmAndamento['ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'].map(orientacao=>({
         sequencia:orientacao['$']['SEQUENCIA-PRODUCAO'],
-        concluido:false,
-        natureza:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['NATUREZA'],
-        titulo:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['TITULO-DO-TRABALHO'],
-        ano:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['ANO'],
+        completed:false,
+        nature:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['NATUREZA'],
+        title:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['TITULO-DO-TRABALHO'],
+        year:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['ANO'],
         nomeDoOrientando:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['NOME-DO-ORIENTANDO'],
         idOrientando:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['NUMERO-ID-ORIENTANDO'],
         codigoInstituicao:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['CODIGO-INSTITUICAO'],
