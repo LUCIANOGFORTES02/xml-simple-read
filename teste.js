@@ -173,7 +173,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         natureza:producao['DADOS-BASICOS-DE-OUTRA-PRODUCAO'][0]['$']['NATUREZA'],
         titulo:producao['DADOS-BASICOS-DE-OUTRA-PRODUCAO'][0]['$']['TITULO'],
         ano:producao['DADOS-BASICOS-DE-OUTRA-PRODUCAO'][0]['$']['ANO'],
-        membros: membros
+        members: membros
         }
     })
     console.log("Outras Produções =  ",outrasProducoesDataData)
@@ -202,7 +202,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         year:software['DADOS-BASICOS-DO-SOFTWARE'][0]['$']['ANO'],
         purpose: software['DETALHAMENTO-DO-SOFTWARE'][0]['$']['FINALIDADE'],
         financial_institution: software['DETALHAMENTO-DO-SOFTWARE'][0]['$']['INSTITUICAO-FINANCIADORA'],
-        membros: membros
+        members: membros
 
         }
 
@@ -223,7 +223,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         year:trabalho['DADOS-BASICOS-DO-TRABALHO-TECNICO'][0]['$']['ANO'],
         purpose: trabalho['DETALHAMENTO-DO-TRABALHO-TECNICO'][0]['$']['FINALIDADE'],
         financial_institution: trabalho['DETALHAMENTO-DO-TRABALHO-TECNICO'][0]['$']['INSTITUICAO-FINANCIADORA'],
-        membros: membros
+        members: membros
 
         }
 
@@ -294,7 +294,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         nomeInstituicao:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['NOME-INSTITUICAO'],
         codigoCurso:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['CODIGO-CURSO'],
         nomeCurso:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-MESTRADO'][0]['$']['NOME-CURSO'],
-        membros:membros
+        members:membros
         }
 
     });
@@ -317,7 +317,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         nomeInstituicao:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['NOME-INSTITUICAO'],
         codigoCurso:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['CODIGO-CURSO'],
         nomeCurso:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'][0]['$']['NOME-CURSO'],
-        membros:membros
+        members:membros
         }
 
     });
@@ -342,7 +342,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         nomeInstituicao:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['NOME-INSTITUICAO'],
         codigoCurso:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['CODIGO-CURSO'],
         nomeCurso:banca['DETALHAMENTO-DA-PARTICIPACAO-EM-BANCA-DE-GRADUACAO'][0]['$']['NOME-CURSO'],
-        membros:membros
+        members:membros
         }
 
     });
@@ -357,12 +357,12 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         sequencia:orientacao['$']['SEQUENCIA-PRODUCAO'],
         completed:false,
         nature:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['NATUREZA'],
-        tipo:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['TIPO'],
+        //tipo:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['TIPO'],
         title:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['TITULO-DO-TRABALHO'],
         year:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['ANO'],
-        tipoDeOrientacao:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['TIPO-DE-ORIENTACAO'],
-        nomeDoOrientando:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['NOME-DO-ORIENTANDO'],
-        idOrientado:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['NUMERO-ID-ORIENTADO'],
+        orientation_type:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['TIPO-DE-ORIENTACAO'],
+        student_name:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['NOME-DO-ORIENTANDO'],
+        student_id:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['NUMERO-ID-ORIENTADO'],
         codigoInstituicao:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['CODIGO-INSTITUICAO'],
         nomeInstituicao:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['NOME-INSTITUICAO'],
         codigoCurso:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO'][0]['$']['CODIGO-CURSO'],
@@ -381,9 +381,9 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         // tipo:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['TIPO'],
         title:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['TITULO-DO-TRABALHO'],
         year:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['ANO'],
-        tipoDeOrientacao:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['TIPO-DE-ORIENTACAO'],
-        nomeDoOrientando:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['NOME-DO-ORIENTANDO'],
-        idOrientando:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['NUMERO-ID-ORIENTANDO'],
+        orientation_type:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['TIPO-DE-ORIENTACAO'],
+        student_name:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['NOME-DO-ORIENTANDO'],
+        student_id:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['NUMERO-ID-ORIENTANDO'],
         codigoInstituicao:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['CODIGO-INSTITUICAO'],
         nomeInstituicao:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['NOME-INSTITUICAO'],
         codigoCurso:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'][0]['$']['CODIGO-CURSO'],
@@ -402,8 +402,8 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         nature:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['NATUREZA'],
         title:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['TITULO-DO-TRABALHO'],
         year:orientacao['DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['ANO'],
-        nomeDoOrientando:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['NOME-DO-ORIENTANDO'],
-        idOrientando:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['NUMERO-ID-ORIENTANDO'],
+        student_name:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['NOME-DO-ORIENTANDO'],
+        student_id:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['NUMERO-ID-ORIENTANDO'],
         codigoInstituicao:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['CODIGO-INSTITUICAO'],
         nomeInstituicao:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['NOME-INSTITUICAO'],
         codigoCurso:orientacao['DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'][0]['$']['CODIGO-CURSO'],
