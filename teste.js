@@ -126,12 +126,23 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
     //IDENTIDADE PRODUÇÃO
     const producaoBibliografica = result['CURRICULO-VITAE']['PRODUCAO-BIBLIOGRAFICA'][0]
     
+    let membrosEventos = [];
 
     const trabalhoEmEventosData = producaoBibliografica['TRABALHOS-EM-EVENTOS'][0]['TRABALHO-EM-EVENTOS'].map(trabalho=>{      
-        const membros= trabalho['AUTORES'].map(membro=>({
-            name : membro['$']['NOME-COMPLETO-DO-AUTOR'],
-            authorship_order: membro['$']['ORDEM-DE-AUTORIA'],
-        }))
+        const membros= trabalho['AUTORES'].reduce((acc,membro)=>{
+            acc.push(
+                {
+                name : membro['$']['NOME-COMPLETO-DO-AUTOR'],
+                authorship_order: membro['$']['ORDEM-DE-AUTORIA'],
+            }
+
+            )
+
+
+            return acc
+    },[])
+    //  console.log(membros)
+   
         
         return{
         sequencia:trabalho['$']['SEQUENCIA-PRODUCAO'],
@@ -139,10 +150,11 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         nature:trabalho['DADOS-BASICOS-DO-TRABALHO'][0]['$']['NATUREZA'],
         title:trabalho['DADOS-BASICOS-DO-TRABALHO'][0]['$']['TITULO-DO-TRABALHO'],
         year:trabalho['DADOS-BASICOS-DO-TRABALHO'][0]['$']['ANO-DO-TRABALHO'],
-        members: membros
+        members:  membros.map(obj => `name: ${obj.name}, authorship_order: ${obj.authorship_order}`)
         }
     })
     console.log("Trabalhos em eventos",trabalhoEmEventosData)
+
 
     const artigoPublicadoData = producaoBibliografica['ARTIGOS-PUBLICADOS'][0]['ARTIGO-PUBLICADO'].map(artigo=>{      
         const membros= artigo['AUTORES'].map(membro=>({
@@ -251,7 +263,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         nomeDaAgencia:orientacao['DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO'][0]['$']['NOME-DA-AGENCIA'],
 
     }));
-    console.log("Orientação do Mestrado",orientacoesMestrado)
+    // console.log("Orientação do Mestrado",orientacoesMestrado)
 
     const outrasOrientacoes =  orietacoesConcluidas['OUTRAS-ORIENTACOES-CONCLUIDAS'].map(orientacao=>({
         sequencia:orientacao['$']['SEQUENCIA-PRODUCAO'],
@@ -271,7 +283,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         nomeDaAgencia:orientacao['DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS'][0]['$']['NOME-DA-AGENCIA'],
 
     }));
-     console.log("Outras Orientações",outrasOrientacoes)
+    //  console.log("Outras Orientações",outrasOrientacoes)
 
     const dadosComplementares = result['CURRICULO-VITAE']['DADOS-COMPLEMENTARES'][0]
   
@@ -298,7 +310,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         }
 
     });
-    console.log("Banca Mestrado",bancaMestrado)
+    // console.log("Banca Mestrado",bancaMestrado)
 
     const bancaExame =  dadosComplementares['PARTICIPACAO-EM-BANCA-TRABALHOS-CONCLUSAO'][0]['PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO'].map(banca=>{
 
@@ -321,7 +333,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         }
 
     });
-    console.log("Banca Exame",bancaExame)
+    // console.log("Banca Exame",bancaExame)
 
 
     const bancaGraduacao =  dadosComplementares['PARTICIPACAO-EM-BANCA-TRABALHOS-CONCLUSAO'][0]['PARTICIPACAO-EM-BANCA-DE-GRADUACAO'].map(banca=>{
@@ -346,7 +358,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
         }
 
     });
-    console.log("Banca Graduação",bancaGraduacao)
+    // console.log("Banca Graduação",bancaGraduacao)
 
     
    
@@ -372,7 +384,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
 
     }
 ))
-    console.log('Orientações em Andamento de Mestrado',orientacaoEmAndamentoMestrado)
+    // console.log('Orientações em Andamento de Mestrado',orientacaoEmAndamentoMestrado)
 
     const orientacaoEmAndamentoDoutorado = orietacoesEmAndamento['ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO'].map(orientacao=>({
         sequencia:orientacao['$']['SEQUENCIA-PRODUCAO'],
@@ -393,7 +405,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
 
     }
 ))
-    console.log('Orientações em Andamento de Doutorado',orientacaoEmAndamentoDoutorado)
+    // console.log('Orientações em Andamento de Doutorado',orientacaoEmAndamentoDoutorado)
 
 
     const orientacaoEmAndamentoInciacao = orietacoesEmAndamento['ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA'].map(orientacao=>({
@@ -413,7 +425,7 @@ fs.readFile('curriculo_latters_guilherme.xml', function(err, data) {
 
     }
 ))
-    console.log('Orientações em Andamento de Iniciação Científica',orientacaoEmAndamentoInciacao)
+    // console.log('Orientações em Andamento de Iniciação Científica',orientacaoEmAndamentoInciacao)
 
     //INFORMAÇÃOES COMPLEMENTARES
 
